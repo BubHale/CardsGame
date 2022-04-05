@@ -16,6 +16,7 @@ of a custom comparison function.
 #include <vector>
 #include <list>
 #include <tuple>
+#include <iterator>
 
 using namespace std;
 
@@ -165,41 +166,44 @@ Card::print() const
 list<Card> 
 mergeSort(list<Card> cards)
 {
-    list<Card> A;
-    list<Card> B;
-    int aPart, bPart;
-    aPart = ceil(cards.size() / 2);
-    bPart = floor(cards.size() / 2);
-    if (cards.size() > 1) {
-        //A = partition(cards.begin(),cards.end(), cards.size() / 2);
-    }
-    while (A.empty() && B.empty()) {
-        if (A.front() < B.front()) {
-            cards.push_back(A.front());
-            A.pop_front();
+    auto middleLeft = next(cards.begin(), floor(cards.size() / 2));
+    auto middleRight = next(cards.begin(), ceil(cards.size() / 2));
+    if (cards.size() <= 1) return cards;
+    else if (cards.size() > 1) {
+        list<Card> left(cards.begin(), middleLeft);
+        list<Card> right(middleRight, cards.end());
+        left = mergeSort(left);
+        right = mergeSort(right);
+        cards.clear();
+        while (!left.empty() && !right.empty()) {
+            if (left.front() < right.front()) {
+                cards.push_back(left.front());
+                left.pop_front();
+            }
+            else {
+                cards.push_back(right.front());
+                right.pop_front();
+            }
         }
-        else {
-            cards.push_back(B.front());
-            B.pop_front();
+        while (!left.empty()) {
+            cards.push_back(left.front());
+            left.pop_front();
         }
+        while (!right.empty()) {
+            cards.push_back(right.front());
+            right.pop_front();
+        }
+        return cards;
     }
-    while (A.empty()) {
-        cards.push_back(A.front());
-        A.pop_front();
-    }
-    while (B.empty()) {
-        cards.push_back(A.front());
-        B.pop_front();
-    }
-    return cards;
+            
 }
 
 // INPUT: a list of (int, Card) tuples
 // OUTPUT: a sorted list of (int, Card) tuples in descending order
 list<tuple<int, Card> >
-bucketSort(list<tuple<int, Card> > cards, int numBuckets)
+bucketSort(list<tuple<int, Card>> cards, int numBuckets)
 {
-    // Your code here
+    return cards;
 }
 
 // INPUT: a list of Cards
@@ -207,14 +211,12 @@ bucketSort(list<tuple<int, Card> > cards, int numBuckets)
 list<Card> 
 lexSort(list<Card> cards)
 {
-    for (int i = 0; i < cards.size(); i++) {
-        
-    }
+    return cards;
 }
 
 int main()
 {
-    string inputFilename = "input.txt";
+    string inputFilename = "C:\\Users\\wizar\\Desktop\\CIS 350 Coding Projects\\CIS350Project2\\input.txt";
     string line;
     bool echo = true;
 
